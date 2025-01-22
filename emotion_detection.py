@@ -7,10 +7,11 @@ def emotion_detector(text_to_analyse):
         myobj = { "raw_document": { "text": text_to_analyse } }
         response = requests.post(url, json = myobj, headers = headers)
         formatted_response = json.loads(response.text)
-        emotion_data = formatted_response['emotionPredictions'][0]['emotion']
 
+        emotion_data = formatted_response['emotionPredictions'][0]['emotion']
+        emotion_data['dominant_emotion'] = max(emotion_data, key=emotion_data.get)
 
         return emotion_data
-    except Exception:
-        return { "error": Exception }
+    except Exception as err:
+        return { "error": str(err) }
         
